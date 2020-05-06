@@ -59,3 +59,52 @@ listen( "click", function handler(evt){
 2.将这个空对象的原型指向构造函数的prototype， {}._proto_ = Foo.prototype
 3.将空对象赋值给构造函数的this
 4.执行构造函数
+
+
+# 节流(throttle) 防抖(debounce)
+
+## throttle
+```js
+1.时间戳
+function throttle(fn, delay) {
+    let preTime = Date.now();
+    return function(...args) {
+        let now = Date.now();
+        if(now - preTime > delay) {
+            preTime = now;
+            fn.apply(this, args);
+        }
+    }
+}
+
+2.timer
+function throttle(fn, delay) {
+    let timer = null;
+    return function(...args) {
+        if(!timer) {
+            timer = setTimeout(() => {
+                fn.apply(this, args);
+                clearTimeout(timer);
+                timer = null;
+            }, delay);
+        }
+    }
+}
+
+
+```
+## debounce
+``` js
+function debounce(fn, delay) {
+    let timer = null;
+    return function(...args) {
+        if(timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            fn.apply(this, args);
+        }, delay);
+    }
+}
+
+```
