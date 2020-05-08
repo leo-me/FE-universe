@@ -108,3 +108,90 @@ function debounce(fn, delay) {
 }
 
 ```
+
+# 装饰器
+给不同的类或者对象添加统一的属性或方法，但是不改变对象或者类本身
+
+运用：mobx @observer  feedtab：@taxi()
+
+```js
+ES6 转 ES5
+
+class Cat {
+    say() {
+        alert('hello');
+    }
+}
+
+function Cat() {
+    Object.defineProperty(Cat.prototype, 'say', {
+        value: function () {alert('hello');},
+        enumerable: false,
+        configurable: true,
+        writable: false
+    });
+}
+
+
+类装饰器
+
+function miu(target) {
+    target.miu = function() {
+        alert('miu');
+    }
+    return target;
+}
+
+@miu
+class Cat {
+    say() {
+        alert('hello');
+    }
+}
+
+Cat.miu();
+
+等同于:
+
+miu(funcion Cat() {
+    Object.defineProperty...
+});
+
+
+
+属性装饰器
+function readonly(target, name, descriptor) {
+    discriptor.writable = false;
+    return discriptor;
+}
+
+class Cat {
+    @readonly
+    say() {
+        console.log("meow ~");
+    }
+}
+
+var kitty = new Cat();
+
+kitty.say = function() {
+    console.log("woof !");
+}
+
+kitty.say()    // meow ~
+
+等同于
+
+let descriptor = {
+    value: function() {
+        console.log("meow ~");
+    },
+    enumerable: false,
+    configurable: true,
+    writable: true
+};
+
+descriptor = readonly(Cat.prototype, "say", descriptor) || descriptor;
+
+Object.defineProperty(Cat.prototype, "say", descriptor);
+```
