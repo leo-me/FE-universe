@@ -183,7 +183,7 @@ kitty.say()    // meow ~
 等同于
 
 let descriptor = {
-    value: function() {
+    value: function() {****
         console.log("meow ~");
     },
     enumerable: false,
@@ -195,3 +195,241 @@ descriptor = readonly(Cat.prototype, "say", descriptor) || descriptor;
 
 Object.defineProperty(Cat.prototype, "say", descriptor);
 ```
+
+
+# https 非对称加密过程
+
+
+# 怎么监听 webpack 的生命周期中plugin怎么去监听事件 ？
+
+
+# loader 解析 webpack的打包过程？
+
+
+# v8的编译过程：javascript的执行过程
+
+词法-语法-AST+执行上下文-字节码-机器码
+
+为什么需要机器码：机器码的执行效率很高，但是占用内存较多，随着v8手机上的普及，内存占用问题暴露出来了，因此重构了
+
+# react 的合成事件, fiber是什么？ 怎么写？
+
+
+# 异步加载script的方式
+1.asyn
+2.defer(async 和defer 同时存在时，defer优先级要比asyn要高)
+3.动态写入脚本： 动态加载即通过js往html中插入script标签
+4.通过xhr加载,受同源策略限制
+```js
+    var xhr = new XMLHttpRequest();
+    xhr.open("get", "js/defer.js",true)
+    xhr.send();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            eval(xhr.responseText);
+        }
+    }
+
+```
+
+
+# 浏览器渲染过程
+
+1. 生成dom树（节点树），生成样式表
+2. 计算节点样式属性
+3. 创建布局树
+4. 布局计算
+5. 绘制（分层、图层绘制、栅格化、显示）
+
+
+# 跨越解决方案
+
+同源协议：同协议、同域名、同端口
+
+## 简单请求：
+(1)使用下列方法之一：
+
+head
+get
+post
+
+(2)请求的Heder是
+
+Accept
+Accept-Language
+Content-Language
+Content-Type: 只限于三个值：application/x-www-form-urlencoded、multipart/form-data、text/plain
+
+
+## 非简单请求：有预检请求
+1）Access-Control-Request-Method：必选
+  用来列出浏览器的CORS请求会用到哪些HTTP方法，上例是PUT。
+2）Access-Control-Request-Headers：可选
+
+
+## 解决方案
+
+1. jsonp
+   ```js
+   var script = document.createElement('script');
+   script.src = 'http:www.124.com/jsonp?callback=handlecallback';
+   document.appendChild(script);
+
+   // 回调函数
+   handlecallback(res) {
+       alert(JSON.parse(res));
+   }
+   ```
+   实现一个jsonp
+
+    ```js
+   function jsonp({ url, params, callback }) {
+     return new Promise((resolve, reject) => {
+       let script = document.createElement('script')
+       window[callback] = function(data) {
+         resolve(data)
+         document.body.removeChild(script)
+       }
+       params = { ...params, callback } // wd=b&callback=show
+       let arrs = []
+       for (let key in params) {
+         arrs.push(`${key}=${params[key]}`)
+       }
+       script.src = `${url}?${arrs.join('&')}`
+       document.body.appendChild(script)
+     })
+   }
+   jsonp({
+     url: 'http://localhost:3000/say',
+     params: { wd: 'Iloveyou' },
+     callback: 'show'
+   }).then(data => {
+     console.log(data)
+   })
+    ```
+
+1. proxy
+
+nginx 代理，node中间层
+
+3. 后端设置跨越跨越
+
+## 本地的跨越方式
+4. postMessage，不限制任何东西
+
+5. iframe
+
+
+# ES6 模块导出规范：export import
+
+```js
+1.default 可以指定任意名字
+a.js
+export default function get() {
+
+}
+
+b.js
+import ffff from 'a.js'
+
+2. 常规用法
+
+a.js
+
+function foo() {
+
+}
+
+export {foo}
+
+b.js
+
+import {foo} from 'a.js'
+
+```
+
+
+
+
+
+# 链式调用
+方法链一般适合对一个对象进行连续操作(集中在一句代码)。一定程度上可以减少代码量，缺点是它占用了函数的返回值。
+
+add(1,3).max(2,3);
+
+```js
+
+class Math {
+   constructor() {
+       this.value = 0;
+   }
+
+    add(number) {
+        this.value += number;
+        return this;
+    }
+}
+
+```
+
+
+
+# webpack 打包编译过程
+
+术语：
+
+entry: 打包入口
+
+loader: 对文件进行转换，如：cssloader、url-loader、babel-loader
+
+plugin: 解决 loader 无法实现的其他事，loader 解析过程中会广播事件，通过监听这些事件做一些处理。
+更好的一个关于plugin的解释：Plugin 是用来扩展 Webpack 功能的，通过在构建流程里注入钩子实现
+
+module: 模块化，文件更小的模块化，易于测试
+
+chunk: 可以用于代码分离，按需加载
+
+vender：第三方包，可用于做长效缓存
+
+流程：
+
+从入口文件递归解析出所有的依赖
+
+
+
+1.loader解析过程
+
+规则1: Loader 的执行顺序是由后到前的
+
+
+2.webpack 的生命周期中plugin怎么去监听事件
+
+
+
+
+# https 非对称加密过程
+
+
+# 偏函数 和 柯里化
+
+偏函数：把函数的参数转换为两部分，
+
+柯里化： 函数多参数都转换成一个参数一个参数的函数调用
+
+
+
+# flex
+
+flex：0 1 auto； 根据自身的宽高来确定尺寸，当尺寸大于容器宽度时，会缩短自身来适应容器，但是不会伸展自身来适应容器剩余的宽度
+
+0是 flex-grow：
+
+1是 flex-shrink
+
+auto是 flex-basis
+
+intial： 0 1 auto
+
+auto： 1 1 auto；
+
+none：0 0 auto
