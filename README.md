@@ -70,53 +70,6 @@ function _new(fn, ...arg) {
 
 ```
 
-# 节流(throttle) 防抖(debounce)
-
-## throttle
-```js
-1.时间戳
-function throttle(fn, delay) {
-    let preTime = Date.now();
-    return function(...args) {
-        let now = Date.now();
-        if(now - preTime > delay) {
-            preTime = now;
-            fn.apply(this, args);
-        }
-    }
-}
-
-2.timer
-function throttle(fn, delay) {
-    let timer = null;
-    return function(...args) {
-        if(!timer) {
-            timer = setTimeout(() => {
-                fn.apply(this, args);
-                clearTimeout(timer);
-                timer = null;
-            }, delay);
-        }
-    }
-}
-
-
-```
-## debounce
-``` js
-function debounce(fn, delay) {
-    let timer = null;
-    return function(...args) {
-        if(timer) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-            fn.apply(this, args);
-        }, delay);
-    }
-}
-
-```
 
 # 装饰器
 给不同的类或者对象添加统一的属性或方法，但是不改变对象或者类本身
@@ -385,39 +338,6 @@ class Math {
 
 
 
-# webpack 打包编译过程
-
-术语：
-
-entry: 打包入口
-
-loader: 对文件进行转换，如：cssloader、url-loader、babel-loader
-
-plugin: 解决 loader 无法实现的其他事，loader 解析过程中会广播事件，通过监听这些事件做一些处理。
-更好的一个关于plugin的解释：Plugin 是用来扩展 Webpack 功能的，通过在构建流程里注入钩子实现
-
-module: 模块化，文件更小的模块化，易于测试
-
-chunk: 可以用于代码分离，按需加载
-
-vender：第三方包，可用于做长效缓存
-
-流程：
-
-从入口文件递归解析出所有的依赖
-
-
-
-1.loader解析过程
-
-规则1: Loader 的执行顺序是由后到前的
-
-
-2.webpack 的生命周期中plugin怎么去监听事件
-
-
-
-
 # https 非对称加密过程
 
 
@@ -556,58 +476,3 @@ HTTP/2 复用 TCP 连接，在一个连接里，客户端和浏览器都可以�
 3. 拉包到.npm文件中
 4. 解压到.node_modules中
 
-
-# 算法题
-## '1, 3, 5, 7, 8, 10' =>  1,3,5,7~8,10
-
-function getContinueNum(string) {
-  let arr = string.split(",");
-  let res = [];
-  let start = 0;
-  let end = 1;
-  arr = arr.map(item => +item);
-
-  for (let i = 0; i < arr.length; i++) {
-    if(i === arr.length - 1) {
-        if(start === i) {
-            res.push(`${arr[start]}`)
-        } else {
-            res.push(`${arr[start]}~${arr[i]}`)
-        }
-    } else {
-        if(arr[i]+1 === arr[end]) {
-            end++;
-        } else if(arr[i]+1 < arr[end]) {
-          if(start === i) {
-              res.push(`${arr[start]}`)
-          } else {
-              res.push(`${arr[start]}~${arr[i]}`)
-          }
-          start=end;
-          end++;
-        }
-    }
-  }
-  return res.join(',');
-}
-
-getContinueNum('1, 3, 5, 7, 8, 10');
-
-
-const nums1 = [1, 2, 3, 5, 7, 8, 10];
-function simplifyStr(num) {
-  var result = [];
-  var temp = num[0]
-  num.forEach((value, index) => {
-    if (value + 1 !== num[index + 1]) {
-      if (temp !== value) {
-        result.push(`${temp}~${value}`)
-      } else {
-        result.push(`${value}`)
-      }
-      temp = num[index + 1]
-    }
-  })
-  return result;
-}
-console.log(simplifyStr(nums1).join(','))
