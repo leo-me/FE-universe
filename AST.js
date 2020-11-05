@@ -131,4 +131,6 @@ function compile(str) {
   return token;
 }
 
-compile('age >= 45');
+compile('money > 145');
+
+

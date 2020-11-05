@@ -60,6 +60,14 @@ listen( "click", function handler(evt){
 3.将空对象赋值给构造函数的this
 4.执行构造函数
 
+``` js
+function _new(fn, ...arg) {
+    const obj = Object.create(fn.prototype);
+    const ret = fn.apply(obj, arg);
+    return ret instanceof Object ? ret : obj;
+}
+
+```
 
 # 节流(throttle) 防抖(debounce)
 
@@ -253,7 +261,7 @@ head
 get
 post
 
-(2)请求的Heder是
+(2)请求的Header是
 
 Accept
 Accept-Language
@@ -313,6 +321,8 @@ Content-Type: 只限于三个值：application/x-www-form-urlencoded、multipart
 nginx 代理，node中间层
 
 3. 后端设置跨越跨越
+
+Access-Control-Allow-Origin
 
 ## 本地的跨越方式
 4. postMessage，不限制任何东西
@@ -412,10 +422,30 @@ vender：第三方包，可用于做长效缓存
 
 # 偏函数 和 柯里化
 
-偏函数：把函数的参数转换为两部分，
+偏函数：把函数的参数转换为两部分，链式调用
+
+```js
+function link() {
+    let value = 0;
+    return function(b) {
+        value += a;
+        return this;
+    }
+}
+
+```
+
 
 柯里化： 函数多参数都转换成一个参数一个参数的函数调用
 
+```js
+function currying(fn, ...args1) {
+    return function(...args2) {
+        currying(fn,...args1, ...args2);
+    }
+}
+
+```
 
 
 # flex
@@ -433,3 +463,150 @@ intial： 0 1 auto
 auto： 1 1 auto；
 
 none：0 0 auto
+
+
+# Set  Map  weakSet  weakMap
+
+
+## Set
+
+类似数组，没有key，value即key
+
+唯一，不可重复
+
+可遍历 Object.keys Object.values Object.entries
+
+add、delete、has
+
+## weakSet
+
+成员都是对象
+
+弱引用（可被GC回收）
+
+不可遍历
+
+## map
+
+类似于key-value的集合
+
+可遍历
+
+get、set、delete、has
+
+
+## weakMap
+
+弱引用（可被GC回收）
+
+不可遍历
+
+只接受对象为key
+
+
+# 深度优先和广度优先
+
+## 深度优先遍历
+回溯
+
+
+
+## 广度优先遍历
+回溯
+
+# 深度优先和广度优先来实现一个深拷贝函数
+
+
+
+
+# ES6和ES5类的继承除了写法不同之外还有什么区别？
+
+## ES5的属性可以枚举，ES6的属性不可枚举
+
+## ES6会提升但不会赋值
+
+## ES6 class 不能直接调用
+
+## ES6 内部方法 无 constructor 无法用 new来调用
+
+
+# 非匿名自执行函数，函数名只读
+```js
+var b = 10;
+(function b(){
+    b = 20;
+    console.log(b);
+})();
+```
+
+输出： function b(){...}
+
+
+
+# http2多路复用
+
+HTTP/2 复用 TCP 连接，在一个连接里，客户端和浏览器都可以同时发送多个请求或回应，而且不用按照顺序一一对应。
+
+
+# 介绍下 npm 模块安装机制，
+
+1.查看node_modules 里是否有相应的包，有的话就不重复加载
+2. 如果本地没有对应的包，查询registry对应的地址
+3. 拉包到.npm文件中
+4. 解压到.node_modules中
+
+
+# 算法题
+## '1, 3, 5, 7, 8, 10' =>  1,3,5,7~8,10
+
+function getContinueNum(string) {
+  let arr = string.split(",");
+  let res = [];
+  let start = 0;
+  let end = 1;
+  arr = arr.map(item => +item);
+
+  for (let i = 0; i < arr.length; i++) {
+    if(i === arr.length - 1) {
+        if(start === i) {
+            res.push(`${arr[start]}`)
+        } else {
+            res.push(`${arr[start]}~${arr[i]}`)
+        }
+    } else {
+        if(arr[i]+1 === arr[end]) {
+            end++;
+        } else if(arr[i]+1 < arr[end]) {
+          if(start === i) {
+              res.push(`${arr[start]}`)
+          } else {
+              res.push(`${arr[start]}~${arr[i]}`)
+          }
+          start=end;
+          end++;
+        }
+    }
+  }
+  return res.join(',');
+}
+
+getContinueNum('1, 3, 5, 7, 8, 10');
+
+
+const nums1 = [1, 2, 3, 5, 7, 8, 10];
+function simplifyStr(num) {
+  var result = [];
+  var temp = num[0]
+  num.forEach((value, index) => {
+    if (value + 1 !== num[index + 1]) {
+      if (temp !== value) {
+        result.push(`${temp}~${value}`)
+      } else {
+        result.push(`${value}`)
+      }
+      temp = num[index + 1]
+    }
+  })
+  return result;
+}
+console.log(simplifyStr(nums1).join(','))
