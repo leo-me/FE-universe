@@ -1,5 +1,6 @@
 # Promise
 ## 背景
+
 在promise出现之前，javascript的异步都是通过回调来实现的。
 
 回调的问题
