@@ -26,10 +26,13 @@ requestStart: 1606053727352
 responseEnd: 1606053727718
 responseStart: 1606053727696
 secureConnectionStart: 0
-unloadEventEnd: 1606053727704
-unloadEventStart: 1606053727704
+unloadEventEnd: 1606053727704 (上次页面unload结束，非相同网页则为0)
+unloadEventStart: 1606053727704 (上一个网页unload 开始，非相同网页则为0)
 
 ```
+
+## 时间轴
+redirectStart-> redirectEnd ->fetchStart-> domainLookupStart -> domainLookupEnd -> connectStart -> connectEnd -> secureConnectionStart ->requestStart->responseStart->responseEnd ->domLoading->domInteractive->  domContentLoadedEventStart->domContentLoadedEventEnd->domComplete  -> loadEventStart ->loadEventEnd
 
 
 1. 使用 performance.getEntries() 获取所有资源请求的时间数据
@@ -51,4 +54,10 @@ usedJSHeapSize: 7731572 - 已使用内存
 ```
 
 
-## 3.navigation 从哪里来，路由信息。
+## 3.navigation 从哪里来，路由信息
+
+```
+redirectCount: 0 - 重定向次数
+type: 0 - 如何进入的页面， 0：正常，1: reload刷新 2:浏览器前进 后退 255:非以上方式
+
+```
