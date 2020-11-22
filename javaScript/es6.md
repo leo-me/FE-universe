@@ -49,3 +49,32 @@ var b = 10;
 ```
 
 输出： function b(){...}
+
+
+# ES6 模块导出规范：export import
+
+```js
+1.default 可以指定任意名字
+a.js
+export default function get() {
+
+}
+
+b.js
+import ffff from 'a.js'
+
+2. 常规用法
+
+a.js
+
+function foo() {
+
+}
+
+export {foo}
+
+b.js
+
+import {foo} from 'a.js'
+
+```
